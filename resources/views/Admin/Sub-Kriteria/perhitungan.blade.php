@@ -17,7 +17,7 @@
                     <div class="row">
 
                       <div class="mt-3 col-md-3">
-                          <label for="exampleFormControlInput1" class="form-label">Pilih Kriteria</label>
+                          <label for="exampleFormControlInput1" class="form-label">Pilih Subkriteria <strong style="color: #00FF0F">*</strong></label>
                           <select class="form-select" name="id_subkriteria_1" aria-label="Default select example">
                             <option hidden>Pilih Subkriteria</option>
                             @foreach($list_subkriteria as $subkriteria1)
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="mt-3 col-md-3">
-                          <label for="exampleFormControlInput1" class="form-label">Pilih Kriteria</label>
+                          <label for="exampleFormControlInput1" class="form-label">Pilih Subkriteria <strong style="color: #00D4FF">*</strong></label>
                           <select class="form-select" name="id_subkriteria_2" aria-label="Default select example">
                             <option hidden>Pilih Subkriteria</option>
                             @foreach($list_subkriteria as $subkriteria2)
@@ -61,12 +61,12 @@
                       <tr>
                         <td> </td>
                       @foreach($list_subkriteria as $subkriteria2)
-                        <th>{{$subkriteria2->nama}}</th>
+                        <th style="background-color: #00D4FF">{{$subkriteria2->nama}}</th>
                       @endforeach
                       </tr>
                       @foreach($list_subkriteria as $subkriteria1)
                       <tr>
-                          <th>{{$subkriteria1->nama}}</th>
+                          <th style="background-color: #00FF0F">{{$subkriteria1->nama}}</th>
                           @foreach($list_subkriteria as $subkriteria2)
                           @php
                             $list_perhitungan = App\Models\PerhitunganSubkriteria::where('id_subkriteria_1', $subkriteria1->id)->where('id_subkriteria_2', $subkriteria2->id)->get();
@@ -95,7 +95,7 @@
               <hr class="my-5" />
               <div class="card">
                   <h5 class="card-header">Perhitungan Matriks Nilai Subkriteria (Normalisasi)</h5>
-                <div class="container">
+                <div class="container mb-4">
                   <div class="row">
                     <div class="col-md-8">
                       <div class="table-responsive text-nowrap">
@@ -114,19 +114,18 @@
                                 @php
                                   $list_perhitungan = App\Models\PerhitunganSubkriteria::where('id_subkriteria_1', $subkriteria1->id)->where('id_subkriteria_2', $subkriteria2->id)->get();
 
-                                  $jumlah_kolom = App\Models\PerhitunganSubkriteria::where('id_subkriteria_2', $subkriteria2->id)->sum('skala');
+                                  $jumlah_skala = App\Models\PerhitunganSubkriteria::where('id_subkriteria_2', $subkriteria2->id)->sum('skala');
                                   
                                 @endphp
                                   @foreach($list_perhitungan as $nilai_matriks)
                                   @php
-                                    ${"normalisasi".$subkriteria1->id} = $nilai_matriks->skala/$jumlah_kolom;
+                                    //Mencari Matriks Nilai Subkriteria
+                                    ${"normalisasi".$subkriteria1->id} = $nilai_matriks->skala/$jumlah_skala;
+
 
                                     if($subkriteria1->id == $nilai_matriks->id_subkriteria_1){
-
-                                    ${"total".$subkriteria1->id}[] = ${"normalisasi".$subkriteria1->id};
-
-                                    
-                                  }
+                                      ${"total".$subkriteria1->id}[] = ${"normalisasi".$subkriteria1->id};
+                                    }
                                   @endphp
                                     <td>
                                       {{number_format(${"normalisasi".$subkriteria1->id},3)}}
@@ -148,8 +147,10 @@
                             </tr>
                             @foreach($list_subkriteria as $subkriteria2)
                             @php
+                            //Mencari Prioritas Matriks Nilai
                               ${"prioritas".$subkriteria2->id} = array_sum(${"total".$subkriteria2->id}) / $list_subkriteria->count();
 
+                            //Mencari Prioritas Subkriteria Matriks Nilai
                               $maks[] = ${"prioritas".$subkriteria2->id};
                               $max = max($maks);
                               $prioritas_sub = ${"prioritas".$subkriteria2->id}/$max;
@@ -173,7 +174,7 @@
 
               <div class="card">
                   <h5 class="card-header">Perhitungan Jumlah Baris</h5>
-                  <div class="container">
+                  <div class="container mb-4">
                     <div class="row">
                       <div class="col-md-8">
                         <div class="table-responsive text-nowrap">
@@ -194,9 +195,10 @@
                               @foreach($list_perhitungan as $perhitungan)
 
                               @php
+                              //Mencari Jumlah Perbaris
                                 ${"nilai".$subkriteria1->id} = $perhitungan->skala * (array_sum(${"total".$subkriteria2->id}) / $list_subkriteria->count());
+                                
                                 if($subkriteria1->id == $perhitungan->id_subkriteria_1){
-
                                     ${"jumlah_baris".$subkriteria1->id}[] = ${"nilai".$subkriteria1->id};
                                   }
                               @endphp
@@ -234,7 +236,7 @@
 
               <div class="card">
                   <h5 class="card-header">Perhitungan Rasio Konsisten</h5>
-                  <div class="container">
+                  <div class="container mb-4">
                     <div class="row">
                       <div class="col-3">
                         <table class="table table-bordered">
@@ -248,7 +250,7 @@
                         @endforeach
                       </table>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3" style="margin-left:-27px">
                         <table class="table table-bordered">
                             <tr>
                               <td>Jumlah Perbaris</td>
@@ -262,7 +264,7 @@
                             @endforeach
                         </table>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3" style="margin-left:-27px">
                         <table class="table table-bordered">
                             <tr>
                               <td>Prioritas</td>
@@ -276,7 +278,7 @@
                             @endforeach
                         </table>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3" style="margin-left:-27px">
                         <table class="table table-bordered">
                             <tr>
                               <td>Hasil</td>
@@ -284,9 +286,11 @@
                             @foreach($list_subkriteria as $subkriteria2)
                             <tr>
                               <td>
+                                <!-- Mencari Hasil Rasio Konsisten -->
                                 {{number_format(array_sum(${"jumlah_baris".$subkriteria2->id})+(array_sum(${"total".$subkriteria2->id}) / $list_subkriteria->count()), 3)}}
 
                                 @php
+                                //Perhitungan Rasio Konsisten Subkriteria
                                     ${"hasil".$subkriteria2->id} = array_sum(${"jumlah_baris".$subkriteria2->id})+(array_sum(${"total".$subkriteria2->id}) / $list_subkriteria->count());
 
                                     $totalhasil[] = ${"hasil".$subkriteria2->id};
@@ -323,16 +327,21 @@
                         $cr = 0;
                       }
 
+                      //Mencari Rasio Konsisten Subkriteria
                       $konsisten = $ci * $cr;
                     @endphp
-                    <h1>
-                      {{number_format($konsisten, 3)}}
-                      @if($konsisten < 0.1)
-                        (Konsisten)
-                      @else
-                        (Tidak Konsisten)
-                      @endif
-                    </h1>
+                    <h4>
+                      <strong>{{number_format($konsisten, 3)}}</strong> 
+                        @if($konsisten < 0.1)
+                        <span class="badge bg-success">
+                          (Konsisten)
+                        </span>
+                        @else
+                        <span class="badge bg-danger">
+                          (Tidak Konsisten, Silahkan lakukan perhitungan ulang)
+                        </span>
+                        @endif
+                    </h4>
                   </div>
               </div>
 

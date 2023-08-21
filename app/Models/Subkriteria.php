@@ -7,7 +7,7 @@ class Subkriteria extends Model{
 	protected $guarded =['id'];
 
 	public function kriteria(){
-		return $this->belongsTo(Kriteria::class);
+		return $this->belongsTo(Kriteria::class, 'kriteria_id');
 	}
 
 	public function subkriteria1(){

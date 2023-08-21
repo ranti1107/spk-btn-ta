@@ -28,12 +28,17 @@
                         <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-user"></i></span>
                         <input
                           type="text"
-                          class="form-control"
+                          class="form-control @error('username') is-invalid @enderror"
                           placeholder="Masukkan Username"
                           aria-label="Masukkan Username"
                           aria-describedby="basic-addon-search31"
                           name="username"
                         />
+                        @error('username')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                        @enderror
                       </div>
 
                       <div class="input-group input-group-merge">

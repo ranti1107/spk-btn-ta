@@ -17,7 +17,7 @@
                     <div class="row">
 
                       <div class="mt-3 col-md-3">
-                          <label for="exampleFormControlInput1" class="form-label">Pilih Kriteria</label>
+                          <label for="exampleFormControlInput1" class="form-label">Pilih Kriteria <strong style="color: #00FF0F">*</strong></label>
                           <select class="form-select" name="id_kriteria_1" aria-label="Default select example">
                             <option hidden>Pilih Kriteria</option>
                             @foreach($list_kriteria as $kriteria)
@@ -39,7 +39,7 @@
                         </div>
 
                         <div class="mt-3 col-md-3">
-                          <label for="exampleFormControlInput1" class="form-label">Pilih Kriteria</label>
+                          <label for="exampleFormControlInput1" class="form-label">Pilih Kriteria <strong style="color: #00D4FF">*</strong></label>
                           <select class="form-select" name="id_kriteria_2" aria-label="Default select example">
                             <option hidden>Pilih Kriteria</option>
                             @foreach($list_kriteria as $kriteria)
@@ -56,39 +56,41 @@
                     </div>
                       </form>
                   </div>
-                <div class="table-responsive text-nowrap">
-                  <table class="table table-bordered">
-                      <tr>
-                        <td> </td>
-                      @foreach($list_kriteria as $kriteria)
-                        <th>{{$kriteria->kode}}</th>
-                      @endforeach
-                      </tr>
-                      @foreach($list_kriteria as $kriteria1)
-                      <tr>
-                          <th>{{$kriteria1->kode}}</th>
+                <div class="container mb-4">
+                  <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <tr>
+                          <td> </td>
+                        @foreach($list_kriteria as $kriteria)
+                          <th style="background-color: #00D4FF">{{$kriteria->nama}}</th>
+                        @endforeach
+                        </tr>
+                        @foreach($list_kriteria as $kriteria1)
+                        <tr>
+                            <th style="background-color: #00FF0F">{{$kriteria1->nama}}</th>
+                            @foreach($list_kriteria as $kriteria)
+                            @php
+                              $list_perhitungan = App\Models\PerhitunganKriteria::where('id_kriteria_1', $kriteria1->id)->where('id_kriteria_2', $kriteria->id)->get();
+                            @endphp
+                              @foreach($list_perhitungan as $perhitungan)
+                              <td>
+                                {{$perhitungan->skala}}
+                              </td>
+                              @endforeach
+                            @endforeach
+                        </tr>
+                        @endforeach
+                        <tr style="background-color: #FFE800">
+                          <td><strong>Jumlah</strong></td>
                           @foreach($list_kriteria as $kriteria)
                           @php
-                            $list_perhitungan = App\Models\PerhitunganKriteria::where('id_kriteria_1', $kriteria1->id)->where('id_kriteria_2', $kriteria->id)->get();
+                            $jumlah_kolom_1 = App\Models\PerhitunganKriteria::where('id_kriteria_2', $kriteria->id)->sum('skala');
                           @endphp
-                            @foreach($list_perhitungan as $perhitungan)
-                            <td>
-                              {{$perhitungan->skala}}
-                            </td>
-                            @endforeach
+                          <td><strong>{{$jumlah_kolom_1}}</strong></td>
                           @endforeach
-                      </tr>
-                      @endforeach
-                      <tr style="background-color: #FFEC00">
-                        <td><strong>Jumlah</strong></td>
-                        @foreach($list_kriteria as $kriteria)
-                        @php
-                          $jumlah_kolom_1 = App\Models\PerhitunganKriteria::where('id_kriteria_2', $kriteria->id)->sum('skala');
-                        @endphp
-                        <td><strong>{{$jumlah_kolom_1}}</strong></td>
-                        @endforeach
-                      </tr>
-                  </table>
+                        </tr>
+                    </table>
+                  </div>
                 </div>
               </div>
               <!--/ Hoverable Table rows -->
@@ -96,7 +98,7 @@
               <hr class="my-5" />
               <div class="card">
                   <h5 class="card-header">Perhitungan Matriks Nilai Kriteria (Normalisasi)</h5>
-                <div class="container">
+                <div class="container mb-4">
                   <div class="row">
                     <div class="col-md-8">
                       <div class="table-responsive text-nowrap">
@@ -104,28 +106,29 @@
                             <tr>
                               <td> </td>
                             @foreach($list_kriteria as $kriteria)
-                              <td>{{$kriteria->kode}}</td>
+                              <td>{{$kriteria->nama}}</td>
                             @endforeach
                             </tr>
                             @foreach($list_kriteria as $kriteria1)
                             <tr>
-                                <td>{{$kriteria1->kode}}</td>
+                                <td>{{$kriteria1->nama}}</td>
 
                                 @foreach($list_kriteria as $kriteria)
                                 @php
                                   $list_perhitungan = App\Models\PerhitunganKriteria::where('id_kriteria_1', $kriteria1->id)->where('id_kriteria_2', $kriteria->id)->get();
 
-                                  $jumlah_kolom = App\Models\PerhitunganKriteria::where('id_kriteria_2', $kriteria->id)->sum('skala');
+                                  $jumlah_skala = App\Models\PerhitunganKriteria::where('id_kriteria_2', $kriteria->id)->sum('skala');
                                   
                                 @endphp
                                   @foreach($list_perhitungan as $nilai_matriks)
                                   @php
-                                    ${"normalisasi".$kriteria1->id} = $nilai_matriks->skala/$jumlah_kolom;
+                                    //Mencari Matriks Nilai Kriteria (Normalisasi)
+                                    ${"normalisasi".$kriteria1->id} = $nilai_matriks->skala/$jumlah_skala;
 
+                                    //Mencari Total Matriks Nilai Kriteria (Normalisasi)
                                     if($kriteria1->id == $nilai_matriks->id_kriteria_1){
-
-                                    ${"total".$kriteria1->id}[] = ${"normalisasi".$kriteria1->id};
-                                  }
+                                      ${"total".$kriteria1->id}[] = ${"normalisasi".$kriteria1->id};
+                                    }
                                   @endphp
                                     <td>
                                       {{number_format(${"normalisasi".$kriteria1->id},3)}}
@@ -149,7 +152,10 @@
                               <td>
                                 {{number_format(array_sum(${"total".$kriteria->id}), 3)}}
                               </td>
-                              <td> {{number_format(array_sum(${"total".$kriteria->id}) / $list_kriteria->count(), 3)}}</td>
+                              <td>
+                                <!-- Mencari Prioritas Matriks Nilai Kriteria -->
+                                {{number_format(array_sum(${"total".$kriteria->id}) / $list_kriteria->count(), 3)}}
+                              </td>
                             </tr>
                             @endforeach
                         </table>
@@ -163,40 +169,43 @@
 
               <div class="card">
                   <h5 class="card-header">Perhitungan Jumlah Baris</h5>
-                  <div class="container">
+                  <div class="container mb-4">
                     <div class="row">
                       <div class="col-8">
-                        <table class="table table-bordered">
-                        <tr>
-                          <td> </td>
-                        @foreach($list_kriteria as $kriteria)
-                          <td>{{$kriteria->kode}}</td>
-                        @endforeach
-                        </tr>
-                        @foreach($list_kriteria as $kriteria1)
-                        <tr>
-                            <td>{{$kriteria1->kode}}</td>
-                            @foreach($list_kriteria as $kriteria)
-                            @php
-                              $list_perhitungan = App\Models\PerhitunganKriteria::where('id_kriteria_1', $kriteria1->id)->where('id_kriteria_2', $kriteria->id)->get();
-                            @endphp
-                              @foreach($list_perhitungan as $perhitungan)
-
+                        <div class="table-responsive text-nowrap">
+                          <table class="table table-bordered">
+                          <tr>
+                            <td> </td>
+                          @foreach($list_kriteria as $kriteria)
+                            <td>{{$kriteria->nama}}</td>
+                          @endforeach
+                          </tr>
+                          @foreach($list_kriteria as $kriteria1)
+                          <tr>
+                              <td>{{$kriteria1->nama}}</td>
+                              @foreach($list_kriteria as $kriteria)
                               @php
-                                ${"nilai".$kriteria1->id} = $perhitungan->skala * (array_sum(${"total".$kriteria->id}) / $list_kriteria->count());
-                                if($kriteria1->id == $perhitungan->id_kriteria_1){
-
-                                    ${"jumlah_baris".$kriteria1->id}[] = ${"nilai".$kriteria1->id};
-                                  }
+                                $list_perhitungan = App\Models\PerhitunganKriteria::where('id_kriteria_1', $kriteria1->id)->where('id_kriteria_2', $kriteria->id)->get();
                               @endphp
-                              <td>
-                                {{number_format(${"nilai".$kriteria1->id}, 3)}}
-                              </td>
+                                @foreach($list_perhitungan as $perhitungan)
+
+                                @php
+                                  //Mencari Jumlah Baris
+                                  ${"nilai".$kriteria1->id} = $perhitungan->skala * (array_sum(${"total".$kriteria->id}) / $list_kriteria->count());
+                                  
+                                  if($kriteria1->id == $perhitungan->id_kriteria_1){
+                                      ${"jumlah_baris".$kriteria1->id}[] = ${"nilai".$kriteria1->id};
+                                    }
+                                @endphp
+                                <td>
+                                  {{number_format(${"nilai".$kriteria1->id}, 3)}}
+                                </td>
+                                @endforeach
                               @endforeach
-                            @endforeach
-                        </tr>
-                        @endforeach
-                    </table>
+                          </tr>
+                          @endforeach
+                      </table>
+                    </div>
                       </div>
                       <div class="col-4">
                         <table class="table table-bordered">
@@ -218,10 +227,9 @@
               </div>
 
               <hr class="my-5" />
-
               <div class="card">
                   <h5 class="card-header">Perhitungan Rasio Konsisten</h5>
-                  <div class="container">
+                  <div class="container mb-4">
                     <div class="row">
                       <div class="col-3">
                         <table class="table table-bordered">
@@ -230,12 +238,12 @@
                         </tr>
                         @foreach($list_kriteria as $kriteria1)
                         <tr>
-                            <td>{{$kriteria1->kode}}</td>
+                            <td>{{$kriteria1->nama}}</td>
                         </tr>
                         @endforeach
                       </table>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3" style="margin-left:-27px">
                         <table class="table table-bordered">
                             <tr>
                               <td>Jumlah Perbaris</td>
@@ -249,7 +257,7 @@
                             @endforeach
                         </table>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3" style="margin-left:-27px">
                         <table class="table table-bordered">
                             <tr>
                               <td>Prioritas</td>
@@ -263,7 +271,7 @@
                             @endforeach
                         </table>
                       </div>
-                      <div class="col-3">
+                      <div class="col-3" style="margin-left:-27px">
                         <table class="table table-bordered">
                             <tr>
                               <td>Hasil</td>
@@ -274,6 +282,7 @@
                                 {{number_format(array_sum(${"jumlah_baris".$kriteria->id})+(array_sum(${"total".$kriteria->id}) / $list_kriteria->count()), 3)}}
 
                                 @php
+                                  //Mencari Hasil Rasio Konsisten
                                     ${"hasil".$kriteria->id} = array_sum(${"jumlah_baris".$kriteria->id})+(array_sum(${"total".$kriteria->id}) / $list_kriteria->count());
 
                                     $totalhasil[] = ${"hasil".$kriteria->id};
@@ -288,6 +297,7 @@
                     </div>
                   </div>
               </div>
+
               <div class="card mt-3">
                   <h5 class="card-header">Rasio Konsisten</h5>
                   <div class="container">
@@ -312,14 +322,18 @@
 
                       $konsisten = $ci * $cr;
                     @endphp
-                    <h1>
-                      {{number_format($konsisten, 3)}}
-                      @if($konsisten < 0.1)
-                        (Konsisten)
-                      @else
-                        (Tidak Konsisten)
-                      @endif
-                    </h1>
+                    <h4>
+                      <strong>{{number_format($konsisten, 3)}}</strong> 
+                        @if($konsisten < 0.1)
+                        <span class="badge bg-success">
+                          (Konsisten)
+                        </span>
+                        @else
+                        <span class="badge bg-danger">
+                          (Tidak Konsisten, Silahkan lakukan perhitungan ulang)
+                        </span>
+                        @endif
+                    </h4>
                   </div>
               </div>
 

@@ -52,9 +52,9 @@
                               </div>
                             </div>
                           </div>
-                          <span class="fw-semibold d-block mb-1">Total Kriteria</span>
-                          <h3 class="card-title mb-2">{{$list_kriteria->count()}}</h3>
-                          <small class="text-success fw-semibold">Kriteria</small>
+                          <span class="fw-semibold d-block mb-1">Nasabah yang sudah diproses</span>
+                          <h3 class="card-title mb-2">{{$list_perhitungan->count()}}</h3>
+                          <small class="text-success fw-semibold">Nasabah</small>
                         </div>
                       </div>
                     </div>
@@ -63,7 +63,7 @@
                         <div class="card-body">
                           <div class="card-title d-flex align-items-start justify-content-between">
                             <div class="avatar flex-shrink-0">
-                              <i class="bx bx-face"></i>
+                              <i class="bx bx-group"></i>
                             </div>
                             <div class="dropdown">
                               <button
@@ -81,7 +81,7 @@
                               </div>
                             </div>
                           </div>
-                          <span class="fw-semibold d-block mb-1">Total Nasabah</span>
+                          <span class="fw-semibold d-block mb-1">Total Seluruh Nasabah</span>
                           <h3 class="card-title mb-2">{{$list_nasabah->count()}}</h3>
                           <small class="text-success fw-semibold">Orang</small>
                         </div>

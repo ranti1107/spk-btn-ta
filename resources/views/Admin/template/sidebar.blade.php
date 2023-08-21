@@ -1,7 +1,7 @@
         <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
           <div class="app-brand demo mb-2">
             <a href="{{url('Admin/beranda')}}" class="app-brand-link">
-              <img src="{{asset('Admin/assets/img/avatars/btn2.png')}}" style="width: 80%;">
+              <img src="{{asset('Admin/assets/img/avatars/btn2.png')}}" style="width: 35%;">
             </a>
 
             <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -22,6 +22,12 @@
               <a href="{{url('Admin/beranda')}}" class="menu-link">
                 <i class="menu-icon tf-icons bx bx-home-circle"></i>
                 <div data-i18n="Analytics">Beranda</div>
+              </a>
+            </li>
+            <li class="menu-item {{request()->is('Admin/penilaian*') ? 'active' : ''}}">
+              <a href="{{url('Admin/penilaian')}}" class="menu-link">
+                <i class="menu-icon tf-icons bx bx-receipt"></i>
+                <div data-i18n="Analytics">Hasil Penilaian</div>
               </a>
             </li>
 

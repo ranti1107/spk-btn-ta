@@ -25,7 +25,7 @@
                     <div class="card-body demo-vertical-spacing demo-only-element">
 
                       <div class="input-group input-group-merge">
-                        <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-phone-call"></i></span>
+                        <span class="input-group-text" id="basic-addon-search31"><i class="bx bx-user"></i></span>
                         <input
                           type="text"
                           class="form-control"

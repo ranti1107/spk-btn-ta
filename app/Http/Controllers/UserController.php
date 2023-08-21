@@ -25,7 +25,11 @@ class UserController extends Controller
             'nama' => 'required|max:255',
             'username' => 'required|unique:users',
             'password' => 'required|min:5|max:255'
-        ]);
+        ],
+            [
+                'username.required'=>'Harap isi bidang ini',
+                'username.unique'=>'Username sudah tersedia sudah tersedia',
+            ]);
             $user = new User;
             $user->level= 0;
             $user->nama= request('nama');
@@ -54,7 +58,7 @@ class UserController extends Controller
             $user->handleUploadFoto();
             $user-> save();
 
-            return redirect('Admin/user-admin')->with('success', 'Edit Data Admin Berhasil');
+            return redirect('Admin/user-admin')->with('success', 'Data Admin Berhasil Diedit');
         
 
     }
@@ -72,9 +76,9 @@ class UserController extends Controller
             $user->username= request('username');
             $user->email = request('email');
             $user->handleUploadFoto();
-            $user-> save();
+            $user-> update();
 
-            return redirect('Admin/user-karyawan')->with('success', 'Edit Data Karyawan Berhasil');
+            return redirect('Admin/user-karyawan')->with('success', 'Data Karyawan Berhasil Diedit');
         
 
     }
@@ -106,7 +110,7 @@ class UserController extends Controller
             $user->handleUploadFoto();
             $user-> save();
 
-            return redirect('Karyawan/profil')->with('success', 'Edit Data Karyawan Berhasil');
+            return redirect('Karyawan/profil')->with('success', 'Data Karyawan Berhasil Diedit');
         
 
     }
@@ -171,7 +175,11 @@ class UserController extends Controller
             'nama' => 'required|max:255',
             'username' => 'required|unique:users',
             'password' => 'required|min:5|max:255'
-        ]);
+        ],
+            [
+                'username.required'=>'Harap isi bidang ini',
+                'username.unique'=>'Username sudah tersedia sudah tersedia',
+            ]);
             $user = new User;
             $user->level= 1;
             $user->nama= request('nama');
@@ -188,12 +196,12 @@ class UserController extends Controller
     function deleteAdmin(User $user){
         $user->delete();
 
-        return redirect()->back()->with('danger', 'Data Admin Telah Dihapus');
+        return redirect()->back()->with('danger', 'Data Admin Berhasil Dihapus');
     }
 
     function deleteKaryawan(User $user){
         $user->delete();
 
-        return redirect()->back()->with('danger', 'Data Karyawan Telah Dihapus');
+        return redirect()->back()->with('danger', 'Data Karyawan Berhasil Dihapus');
     }
 }

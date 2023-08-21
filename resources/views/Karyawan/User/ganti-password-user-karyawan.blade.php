@@ -1,7 +1,7 @@
 @extends('Karyawan.template.base')
 @section('content')
 
-<h4 class="fw-bold py-3 mb-4">User Karyawan</h4>
+<h4 class="fw-bold py-3 mb-4">Setting Akun Karyawan</h4>
 
               <div class="row">
 

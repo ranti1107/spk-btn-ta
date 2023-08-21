@@ -8,6 +8,7 @@ use App\Http\Controllers\KriteriaController;
 use App\Http\Controllers\SubKriteriaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PerhitunganController;
+use App\Http\Controllers\PenilaianController;
 use App\Http\Controllers\AuthController;
 
 /*
@@ -33,6 +34,8 @@ Route::group(['middleware'=>['auth']], function(){
 	Route::group(['middleware'=>['CheckLogin:0']], function(){
 		Route::prefix('Admin')->group(function(){
 			Route::get('beranda', [AdminController::class, 'Beranda']);
+
+			Route::get('penilaian', [PenilaianController::class, 'Hasil']);
 
 			Route::get('user-admin', [UserController::class,'BerandaUserAdmin']);
 			Route::get('user-admin/create', [UserController::class,'CreateUserAdmin']);
@@ -103,7 +106,7 @@ Route::group(['middleware'=>['auth']], function(){
 			Route::delete('perhitungan/hapus/{perhitungan}', [PerhitunganController::class, 'hapus']);
 			Route::get('tambah-bobot/{perhitungan}', [PerhitunganController::class, 'tambahbobot']);
 			Route::post('tambah-bobot/{perhitungan}', [PerhitunganController::class, 'simpanbobot']);
-			Route::put('edit-bobot/{perhitungan}', [PerhitunganController::class, 'editbobot']);
+			Route::put('edit-bobot/{bobot}', [PerhitunganController::class, 'editbobot']);
 			Route::get('tambah-nasabah/create', [PerhitunganController::class,'create']);
 			Route::post('tambah-nasabah', [PerhitunganController::class,'simpan']);
 

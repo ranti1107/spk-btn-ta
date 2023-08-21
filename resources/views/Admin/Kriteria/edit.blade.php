@@ -23,7 +23,7 @@
                         <input type="text" class="form-control" name="nama" value="{{$kriteria->nama}}" id="exampleFormControlInput1">
                       </div>
                       <div class="mt-3 col-md-4">
-                        <label for="exampleFormControlInput1" class="form-label">{{$kriteria->jenis}}</label>
+                        <label for="exampleFormControlInput1" class="form-label">Jenis Kriteria</label>
                         <select class="form-select" name="jenis" aria-label="Default select example">
                           <option hidden value="{{$kriteria->jenis}}">{{$kriteria->jenis}}</option>
                           <option value="Benefit">Benefit</option>

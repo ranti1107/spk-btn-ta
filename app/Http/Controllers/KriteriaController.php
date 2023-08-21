@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 use App\Models\Kriteria;
 use App\Models\PerhitunganKriteria;
+use App\Models\SubPerhitungan;
 use Illuminate\Http\Request;
 
 
 class KriteriaController extends Controller
 {
 	function BerandaKriteria(){
-		$data['list_kriteria'] = Kriteria::all();
+		$data['list_kriteria'] = Kriteria::orderBy('kode', 'ASC')->get();
 		return view('Admin.Kriteria.beranda', $data);
 	}
 
@@ -20,6 +21,7 @@ class KriteriaController extends Controller
 		} else {
 			$kode_kriteria = substr($kode, 1,2)+1;
 		}
+
 		$data['kode'] = "C".$kode_kriteria;
 		return view('Admin.Kriteria.create', $data);
 	}
@@ -90,26 +92,32 @@ class KriteriaController extends Controller
 			$subkriteria->delete();
 		}
 
-		$kriteria1 = PerhitunganKriteria::where('id_kriteria_1', $kriteria->id)->get();
-
-		if(!is_null($kriteria1)){
-		foreach(
-			$kriteria1 as $subkriteria
-		){
-			$subkriteria->delete();
+		$bobots = SubPerhitungan::where('id_kriteria', $kriteria->id)->get();
+		if(!is_null($bobots)){
+			foreach(
+				$bobots as $bobot
+			){
+				$bobot->delete();
+			}
 		}
+
+		$kriteria1 = PerhitunganKriteria::where('id_kriteria_1', $kriteria->id)->get();
+		if(!is_null($kriteria1)){
+			foreach(
+				$kriteria1 as $subkriteria
+			){
+				$subkriteria->delete();
+			}
 		}
 
 		$kriteria2 = PerhitunganKriteria::where('id_kriteria_2', $kriteria->id)->get();
-
 		if(!is_null($kriteria2)){
-		foreach(
-			$kriteria2 as $subkriteria
-		){
-			$subkriteria->delete();
+			foreach(
+				$kriteria2 as $subkriteria
+			){
+				$subkriteria->delete();
+			}
 		}
-		}
-
 
 		$kriteria->delete();
 
@@ -118,13 +126,13 @@ class KriteriaController extends Controller
 	}
 
 	function berandaperhitungan(Request $request){
-		$data['list_kriteria'] = Kriteria::all();
+		$data['list_kriteria'] = Kriteria::orderBy('kode', 'ASC')->get();
 
 		return view('Admin.Kriteria.perhitungan', $data);
 	}
 
 	function tambahperhitungan(Kriteria $kriteria){
-		$data['list_kriteria'] = Kriteria::all();
+		$data['list_kriteria'] = Kriteria::orderBy('kode', 'ASC')->get();
 
 		$kriteria = PerhitunganKriteria::where('id_kriteria_1', $kriteria1->id)->where('id_kriteria_2', $kriteria->id)->get('skala');
 		foreach($kriteria as $k){

@@ -33,7 +33,7 @@
                     </thead>
                     <tbody class="table-border-bottom-0">
                         @php
-                        $list_subkriteria = App\Models\Subkriteria::where('kriteria_id', $kriteria->id)->get();
+                        $list_subkriteria = App\Models\Subkriteria::where('kriteria_id', $kriteria->id)->orderBy('bobot', 'DESC')->get();
                         @endphp
                         @foreach($list_subkriteria as $subkriteria)
                       <tr>

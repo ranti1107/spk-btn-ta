@@ -1,7 +1,7 @@
 @extends('Admin.template.base')
 @section('content')
 
-<h4 class="fw-bold py-3 mb-4">User Admin</h4>
+<h4 class="fw-bold py-3 mb-4">Setting Akun Admin</h4>
 
               <div class="row">
 

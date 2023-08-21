@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 use App\Models\Subkriteria;
 use App\Models\PerhitunganSubkriteria;
 use App\Models\Kriteria;
+use App\Models\SubPerhitungan;
 use Illuminate\Http\Request;
 
 
 class SubKriteriaController extends Controller
 {
 	function BerandaSubKriteria(Kriteria $kriteria){
-		$data['list_kriteria'] = Kriteria::all();
+		$data['list_kriteria'] = Kriteria::orderBy('kode', 'ASC')->get();
 		$data['kriteria'] = $kriteria->kode;
 		// $data['list_subkriteria'] = Subkriteria::all();
 		return view('Admin.Sub-Kriteria.beranda', $data);
@@ -102,6 +103,10 @@ class SubKriteriaController extends Controller
 		}
 		}
 
+		$bobots = SubPerhitungan::where('id_subkriteria', $subkriteria->id)->get();
+		foreach($bobots as $bobot){
+			$bobot->delete();
+		}
 		$subkriteria->delete();
 
 		return redirect ('Admin/sub-kriteria')-> with ('danger', 'Data Subkriteria berhasil dihapus');

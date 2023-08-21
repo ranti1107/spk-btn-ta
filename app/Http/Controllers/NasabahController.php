@@ -80,7 +80,6 @@ class NasabahController extends Controller
 		$nasabah->handleUploadIzinPraktek();
 		$nasabah->handleUploadRekeningKoran();
 		$nasabah->handleUploadPasFoto();
-
 		$nasabah->update();
 
 		return redirect('Karyawan/nasabah')->with('success', 'Data Nasabah Berhasil Diedit');
